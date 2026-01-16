@@ -19,14 +19,14 @@
     "languages": [
       {
         "id": "r",
-        "configuration": "./language-configuration.json"
+        "configuration": "./config/language-configuration.json"
       }
     ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "compile": "tsc -p ./config/tsconfig.json",
+    "watch": "tsc -watch -p ./config/tsconfig.json",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"

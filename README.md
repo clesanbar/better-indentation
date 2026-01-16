@@ -23,9 +23,9 @@ The first is what you get when you're writing in Positron, while the second is w
 
 - `src/`: Core TypeScript implementation logic.
 - `test/`: Test cases and scripts to verify indentation behavior.
+- `config/`: Configuration files (TypeScript config, Language configuration).
 - `docs/`: Project research and design documentation.
 - `releases/`: Packaged `.vsix` files for installation.
-- `language-configuration.json`: Declarative rules for indentation and brackets.
 
 ## Initial steps
 
