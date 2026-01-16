@@ -19,7 +19,7 @@ iris |>
 ```
 The first is what you get when you're writing in Positron, while the second is what you get when you are writing in R. I personally like the second one more, even if some might disagree. And while I understand that some prefer things like Air to format their code, I personally think it looks ugly, and that it is a waste of space. I learned to code in R using RStudio, and want to keep using the same indentation rules. It seems the Positron team is not interested in implementing this feature, so I want to take it upon myself to do it.
 
-## Next Steps
+## Initial steps
 
 - [x] **Research:** Investigate Positron/VS Code extension capabilities for custom indentation (specifically `language-configuration.json` and `OnEnterRules`).
 - [x] **Setup:** Initialize the project as a VS Code extension (using TypeScript/JavaScript).
@@ -27,3 +27,7 @@ The first is what you get when you're writing in Positron, while the second is w
 - [x] **Implementation - Arguments:** Implement alignment logic for function arguments inside parentheses.
 - [x] **Testing:** Verify the behavior against the `iris` example provided in the overview.
 
+## Subsequent steps
+
+- [x] Pipe indentation erroneously inherits deep indentation from aligned arguments.
+- [] The indentation seems to reset when including a comment between a pipe and a function.
