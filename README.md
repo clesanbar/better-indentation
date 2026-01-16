@@ -21,7 +21,7 @@ The first is what you get when you're writing in Positron, while the second is w
 
 ## Next Steps
 
-- [ ] **Research:** Investigate Positron/VS Code extension capabilities for custom indentation (specifically `language-configuration.json` and `OnEnterRules`).
+- [x] **Research:** Investigate Positron/VS Code extension capabilities for custom indentation (specifically `language-configuration.json` and `OnEnterRules`).
 - [ ] **Setup:** Initialize the project as a VS Code extension (using TypeScript/JavaScript).
 - [ ] **Implementation - Pipe:** Implement indentation logic for the native pipe operator `|>`.
 - [ ] **Implementation - Arguments:** Implement alignment logic for function arguments inside parentheses.
