@@ -55,3 +55,4 @@ rsconnect/
 
 # Do not track the folder that quarto creates when rendering slides
 slides/quarto_slides_files/
+\n# Node/VSCode\nnode_modules/\nout/\n*.vsix
