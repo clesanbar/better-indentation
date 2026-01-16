@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
-import { getAlignmentColumn } from './indentation';
+import { getIndentationEdit } from './indentation';
 
 export function activate(context: vscode.ExtensionContext) {
     const provider = vscode.languages.registerOnTypeFormattingEditProvider(
         { language: 'r' },
         {
-            provideOnTypeFormattingEdits(document, position, ch, _options, _token) {
+            provideOnTypeFormattingEdits(document, position, ch, options, _token) {
                 if (ch !== '\n') {
                     return undefined;
                 }
@@ -25,10 +25,10 @@ export function activate(context: vscode.ExtensionContext) {
                     }
                 };
 
-                const targetColumn = getAlignmentColumn(fakeDoc, {
+                const targetColumn = getIndentationEdit(fakeDoc, {
                     line: position.line,
                     character: position.character
-                });
+                }, options.tabSize);
 
                 if (targetColumn === undefined) {
                     return undefined;

@@ -5,7 +5,7 @@ const vscode = require("vscode");
 const indentation_1 = require("./indentation");
 function activate(context) {
     const provider = vscode.languages.registerOnTypeFormattingEditProvider({ language: 'r' }, {
-        provideOnTypeFormattingEdits(document, position, ch, _options, _token) {
+        provideOnTypeFormattingEdits(document, position, ch, options, _token) {
             if (ch !== '\n') {
                 return undefined;
             }
@@ -23,10 +23,10 @@ function activate(context) {
                     };
                 }
             };
-            const targetColumn = (0, indentation_1.getAlignmentColumn)(fakeDoc, {
+            const targetColumn = (0, indentation_1.getIndentationEdit)(fakeDoc, {
                 line: position.line,
                 character: position.character
-            });
+            }, options.tabSize);
             if (targetColumn === undefined) {
                 return undefined;
             }
