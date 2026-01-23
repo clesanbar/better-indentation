@@ -36,4 +36,6 @@ This document outlines the R coding conventions to be used by the Gemini assista
 
 ## 5. Workflow
 
+-   **Git:** The user prefers to commit changes themselves. Never commit any changes you have made to Git.
+
 -   **README Updates:** After completing a requested task, review the `README.md` file and remove any mention of the task being a "to-do" item. Treat the `README.md` as a dynamic list of pending actions.
