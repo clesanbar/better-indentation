@@ -1,4 +1,4 @@
-# IndenteR: an extension for better indentation in Positron
+# indentR: an extension for better indentation in Positron
 
 ## Overview
 
