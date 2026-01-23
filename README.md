@@ -39,5 +39,9 @@ The first is what you get when you're writing in Positron, while the second is w
 
 - [x] Pipe indentation erroneously inherits deep indentation from aligned arguments.
 - [x] The indentation seems to reset when including a comment between a pipe and a function.
-- [x] Reset indentation after the chain of pipes is over and the user wants to create a new object.
-- [] Avoid increasing indentation in the middle of a piped object.
+- [x] Avoid increasing indentation in the middle of a piped object.
+- [] Completely reset indentation after the chain of pipes is over and a new object is created.
+
+## Future fixes, not priority
+
+- [] Every time the extension compiles there is a "A 'repository' field is missing from the 'package.json' manifest file." warning that I have to manually accept. Add a the field that is necessary for this to stop being a problem.

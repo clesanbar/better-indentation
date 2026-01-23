@@ -8,7 +8,7 @@ b <- 1:10
 
 # Current implementation ---------
 
-data <- tibble(a,b) |>
+data <- tibble(a, b) |>
   # create new variables
   mutate(c = c + b,
          d = c * 10)
@@ -16,17 +16,17 @@ data <- tibble(a,b) |>
 second_data <- data |>
   # create new variables
   mutate(f = c * d) |>
-    # subset tp certain cases
-    filter(a == 4)
-  
+  # subset to certain cases
+  filter(a == 4)
+
   third_data <- second_data |>
     # keep a couple of variables
-    select(a, b,c )
+    select(a, b, c)
 
 
 # Intended functionality ----------
 
-data <- tibble(a,b) |>
+data <- tibble(a, b) |>
   # create new variables
   mutate(c = c + b,
          d = c * 10)
@@ -34,9 +34,9 @@ data <- tibble(a,b) |>
 second_data <- data |>
   # create new variables
   mutate(f = c * d) |>
-  # subset tp certain cases
+  # subset to certain cases
   filter(a == 4)
-    
+
 third_data <- second_data |>
   # keep a couple of variables
   select(a, b, c)
