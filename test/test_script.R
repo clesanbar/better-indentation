@@ -19,9 +19,9 @@ second_data <- data |>
   # subset to certain cases
   filter(a == 4)
 
-  third_data <- second_data |>
-    # keep a couple of variables
-    select(a, b, c)
+third_data <- second_data |>
+  # keep a couple of variables
+  select(a, b, c)
 
 
 # Intended functionality ----------

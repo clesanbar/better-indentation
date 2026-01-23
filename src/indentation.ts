@@ -82,8 +82,37 @@ export function getIndentationEdit(
             // we have finished the chain.
             // We want to reset to the anchor of the chain.
             
-            const anchorLineIndex = findPipeAnchor(document, preStartLineIndex);
-            const anchorLine = document.lineAt(anchorLineIndex);
+            // Walk up the chain to find the root
+            let chainAnchorIndex = findPipeAnchor(document, preStartLineIndex);
+            
+            for (let i = 0; i < 1000; i++) { // Safety limit
+                let prevChainIndex = chainAnchorIndex - 1;
+                let prevChainText = "";
+                let foundPrev = false;
+
+                // Scan backwards for non-comment
+                for (let j = prevChainIndex; j >= 0; j--) {
+                    const text = document.lineAt(j).text;
+                    if (!/^\s*#/.test(text) && !/^\s*$/.test(text)) {
+                        prevChainIndex = j;
+                        prevChainText = text;
+                        foundPrev = true;
+                        break;
+                    }
+                }
+
+                if (!foundPrev) {
+                    break;
+                }
+
+                if (/(?:%>|\|>|\+)\s*$/.test(prevChainText) || /%\s*$/.test(prevChainText)) {
+                    chainAnchorIndex = findPipeAnchor(document, prevChainIndex);
+                } else {
+                    break;
+                }
+            }
+            
+            const anchorLine = document.lineAt(chainAnchorIndex);
             const anchorIndentMatch = anchorLine.text.match(/^\s*/);
             return anchorIndentMatch ? anchorIndentMatch[0].length : 0;
         }
