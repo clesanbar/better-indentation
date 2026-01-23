@@ -50,108 +50,81 @@ export function getIndentationEdit(
     }
 
     // Check for Argument Alignment
-    return getAlignmentColumn(document, position);
+    const alignment = getAlignmentColumn(document, position);
+    if (alignment !== undefined) {
+        return alignment;
+    }
+
+    // Check for Reset after Pipe Chain
+    // If the previous line did not end in a pipe (otherwise we'd be in the first if),
+    // we check if it was the end of a chain.
+    // We find the start of the expression on the previous line.
+    const startLineIndex = findExpressionStart(document, effectiveLineIndex);
+    
+    // Check if the line BEFORE the expression start ends in a pipe.
+    let preStartLineIndex = startLineIndex - 1;
+    let preStartLineText = "";
+     // Scan backwards
+    for (let i = preStartLineIndex; i >= 0; i--) {
+        const text = document.lineAt(i).text;
+        if (!/^\s*#/.test(text) && !/^\s*$/.test(text)) {
+            preStartLineIndex = i;
+            preStartLineText = text;
+            break;
+        }
+    }
+
+    if (preStartLineIndex >= 0 && preStartLineIndex < startLineIndex) {
+        if (/(?:%>|\|>|\+)\s*$/.test(preStartLineText) || /%\s*$/.test(preStartLineText)) {
+            // The expression starting at startLineIndex follows a pipe.
+            // So it was part of a chain.
+            // Since effectiveLine (end of that expression) does NOT end in a pipe,
+            // we have finished the chain.
+            // We want to reset to the anchor of the chain.
+            
+            const anchorLineIndex = findPipeAnchor(document, preStartLineIndex);
+            const anchorLine = document.lineAt(anchorLineIndex);
+            const anchorIndentMatch = anchorLine.text.match(/^\s*/);
+            return anchorIndentMatch ? anchorIndentMatch[0].length : 0;
+        }
+    }
+
+    return undefined;
 }
 
-function getPipeIndentation(document: FakeDocument, lineIndex: number, tabSize: number): number {
-    const prevLineText = document.lineAt(lineIndex).text;
-    
-    // 1. Find the anchor line.
-    
-    const pipeMatch = prevLineText.match(/((?:%>%)|(?:\|>)|(?:%T>)|(?:%<>%)|(?:\+))\s*$/);
-    if (!pipeMatch) {
-         // Fallback if the initial check passed but this strict one didn't.
-         // e.g. maybe it ended in % but wasn't a pipe?
-         // But let's try to match simpler.
-         return 0; 
-    }
-    
-    const textBeforePipe = prevLineText.substring(0, pipeMatch.index);
-    
-    // We need to find the "logical start" of this line's expression.
-    // Scan backwards finding matching brackets.
+function findExpressionStart(document: FakeDocument, lineIndex: number): number {
     let bracketLevel = 0;
-    let anchorLineIndex = lineIndex;
-    
-    // We only need to scan if there is a closing bracket at the end of textBeforePipe?
-    // Not necessarily. "filter() |>" -> ")" is there.
-    // "select(a) |>" -> ")" is there.
-    
-    // Actually, we want to find the open bracket that *matches* the last closing bracket?
-    // No, we want to find the open bracket that contains the expression? 
-    // In "b) |>", the expression ending at ")" started at "(".
-    
-    // Let's reuse the scan logic but go across lines if needed.
-    // We start scanning from end of textBeforePipe.
-    
     let currentScanLineIndex = lineIndex;
-    let currentScanText = textBeforePipe;
+    let currentScanText = document.lineAt(currentScanLineIndex).text;
     
     while (currentScanLineIndex >= 0) {
         for (let c = currentScanText.length - 1; c >= 0; c--) {
-            const char = currentScanText[c];
             if (isInStringOrComment(currentScanText, c)) continue;
             
+            const char = currentScanText[c];
             if (char === ')' || char === ']' || char === '}') {
                 bracketLevel++;
             } else if (char === '(' || char === '[' || char === '{') {
-                if (bracketLevel > 0) {
+                 if (bracketLevel > 0) {
                     bracketLevel--;
-                    if (bracketLevel === 0) {
-                        // We closed a group.
-                        // Is this the "main" group?
-                        // In "b) |>", we hit ")", level 1. Then "(", level 0.
-                        // We are now at "tibble(". 
-                        // We continue? No, if we just want the anchor for indentation, this might be it.
-                        anchorLineIndex = currentScanLineIndex;
-                    }
-                } else {
-                    // Open bracket with no matching close bracket (in our backward scan).
-                    // This means we are inside this bracket.
-                    // e.g. "mutate( |>" -> We found "(".
-                    // This is definitely the start.
-                    anchorLineIndex = currentScanLineIndex;
-                    // But wait, do we stop?
-                    // If we have "data |> filter() |>", 
-                    // Scan back: ")" -> level 1. "(" -> level 0.
-                    // Anchor becomes "filter" line.
-                    // Loop continues.
-                    // If we stop at level 0, we found the pair for the last thing.
-                    // If we just want the line that *contains* the matching start of the *last* closed group?
-                }
+                } 
             }
         }
         
-        // If we are balancing brackets, and we are at level 0, we generally stop?
-        // In "b) |>", we match ")". Level 0 at "(".
-        // If we stop there, anchor is "tibble" line. Correct.
-        
-        // In "filter() |>", we match ")". Level 0 at "(".
-        // If we stop there, anchor is "filter" line. Correct.
-        
-        if (bracketLevel === 0 && currentScanLineIndex !== lineIndex) {
-             // We went back lines and balanced.
-             break;
-        }
-        if (bracketLevel === 0 && currentScanLineIndex === lineIndex) {
-            // We balanced on the same line.
-            // But we need to be careful. "tibble(a, b) |>" -> Balanced on same line. Anchor is same line.
-            // "b) |>" -> Balanced on prev line. Anchor is prev line.
-            // So if bracketLevel is 0, we can basically stop scanning?
-            // Unless we haven't encountered any brackets yet?
-            // "x |>" -> bracketLevel always 0.
-            break;
+        if (bracketLevel === 0) {
+             return currentScanLineIndex;
         }
 
         currentScanLineIndex--;
         if (currentScanLineIndex >= 0) {
             currentScanText = document.lineAt(currentScanLineIndex).text;
-             // Need to handle multi-line scan correctly (checking range end etc)
-             // simplified here assuming text is enough
         }
     }
-    
-    // Now we have anchorLineIndex.
+    return 0;
+}
+
+function getPipeIndentation(document: FakeDocument, lineIndex: number, tabSize: number): number {
+    const anchorLineIndex = findPipeAnchor(document, lineIndex);
     const anchorLine = document.lineAt(anchorLineIndex);
     const anchorIndentMatch = anchorLine.text.match(/^\s*/);
     const anchorIndent = anchorIndentMatch ? anchorIndentMatch[0].length : 0;
@@ -169,6 +142,56 @@ function getPipeIndentation(document: FakeDocument, lineIndex: number, tabSize: 
     }
     
     return addIndent ? anchorIndent + tabSize : anchorIndent;
+}
+
+function findPipeAnchor(document: FakeDocument, lineIndex: number): number {
+    const prevLineText = document.lineAt(lineIndex).text;
+    
+    const pipeMatch = prevLineText.match(/((?:%>%)|(?:\|>)|(?:%T>)|(?:%<>%)|(?:\+))\s*$/);
+    if (!pipeMatch) {
+         return lineIndex; 
+    }
+    
+    const textBeforePipe = prevLineText.substring(0, pipeMatch.index);
+    
+    let bracketLevel = 0;
+    let anchorLineIndex = lineIndex;
+    
+    let currentScanLineIndex = lineIndex;
+    let currentScanText = textBeforePipe;
+    
+    while (currentScanLineIndex >= 0) {
+        for (let c = currentScanText.length - 1; c >= 0; c--) {
+            const char = currentScanText[c];
+            if (isInStringOrComment(currentScanText, c)) continue;
+            
+            if (char === ')' || char === ']' || char === '}') {
+                bracketLevel++;
+            } else if (char === '(' || char === '[' || char === '{') {
+                if (bracketLevel > 0) {
+                    bracketLevel--;
+                    if (bracketLevel === 0) {
+                        anchorLineIndex = currentScanLineIndex;
+                    }
+                } else {
+                    anchorLineIndex = currentScanLineIndex;
+                }
+            }
+        }
+        
+        if (bracketLevel === 0 && currentScanLineIndex !== lineIndex) {
+             break;
+        }
+        if (bracketLevel === 0 && currentScanLineIndex === lineIndex) {
+            break;
+        }
+
+        currentScanLineIndex--;
+        if (currentScanLineIndex >= 0) {
+            currentScanText = document.lineAt(currentScanLineIndex).text;
+        }
+    }
+    return anchorLineIndex;
 }
 
 export function getAlignmentColumn(
