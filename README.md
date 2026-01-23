@@ -1,7 +1,5 @@
 # indentR: an extension for better indentation in Positron
 
-## Overview
-
 The main goal of this project is to build an extension for Positron that mimics the way that indentation works for RStudio. Consider the following example, adapted from [this post](https://stackoverflow.com/questions/79736776/how-to-have-function-argument-indenting):
 
 ```
@@ -33,6 +31,9 @@ The first is what you get when you're writing in Positron, while the second is w
 2. Use `cmd+shift+P` (MacOS) or `ctrl+shift+P` (Windows) to open the command palette, and select "Extensions: install from VSIX".
 3. Select the `.vsix` that was downloaded.
 4. Let me know if you find any cases I haven't considered!
+
+
+# Development
 
 ## Initial steps
 
