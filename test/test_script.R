@@ -10,12 +10,15 @@ b <- 1:10
 
 data <- tibble(a, b) |>
   # create new variables
-  mutate(c = c + b,
-         d = c * 10)
+  mutate(
+c = a + b,
+d = c * 10
+  )
 
 second_data <- data |>
   # create new variables
-  mutate(f = c * d) |>
+  mutate(f = c * d,
+         g = f^2) |>
   # subset to certain cases
   filter(a == 4)
 
@@ -28,12 +31,15 @@ third_data <- second_data |>
 
 data <- tibble(a, b) |>
   # create new variables
-  mutate(c = c + b,
-         d = c * 10)
+  mutate(
+    c = a + b,
+    d = c * 10
+  )
 
 second_data <- data |>
   # create new variables
-  mutate(f = c * d) |>
+  mutate(f = c * d,
+         g = f^2) |>
   # subset to certain cases
   filter(a == 4)
 
