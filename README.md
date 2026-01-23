@@ -2,7 +2,7 @@
 
 ## Overview
 
-The main goal of this project is to build an extension for Positron that mimics the way that indentation works for RStudio. Consider the following example, adapted from [this example](https://stackoverflow.com/questions/79736776/how-to-have-function-argument-indenting):
+The main goal of this project is to build an extension for Positron that mimics the way that indentation works for RStudio. Consider the following example, adapted from [this post](https://stackoverflow.com/questions/79736776/how-to-have-function-argument-indenting):
 
 ```
 iris |>
@@ -17,7 +17,14 @@ iris |>
          # and function arguments are indented
          test_2 = "cat")
 ```
-The first is what you get when you're writing in Positron, while the second is what you get when you are writing in RStudio. Even if some consider the second to be improper code, I think it looks nice. And while I understand that some prefer things like Air to format their code, I personally think it looks ugly, and that it is a waste of vertical space (sorry). I learned to code in R using RStudio, and want to keep using the same indentation rules. It seems the Positron team is not interested in implementing this feature, so I want to take it upon myself to do it using Gemini CLI.
+The first is what you get when you're writing in Positron, while the second is what you get when you are writing in RStudio. Even if some consider the second to be improper code, I think it looks nice. And while I understand that some prefer things like Air to format their code, I personally think it looks ugly, and that it is a waste of vertical space (sorry). I learned to code in R using RStudio, and want to keep using the same indentation rules now that I'm relying more on Positron. It seems the Posit team is not interested in implementing this feature, so I want to take it upon myself to do it with the help of Gemini CLI.
+
+## Installation instructions
+
+1. Download the latest version in the `releases/` folder.
+2. Use `cmd+shift+P` (MacOS) or `ctrl+shift+P` (Windows) to open the command palette, and select "Extensions: install from VSIX".
+3. Select the `.vsix` that was downloaded.
+4. Let me know if you find any cases I haven't considered!
 
 ## Repository structure
 
@@ -49,9 +56,3 @@ The first is what you get when you're writing in Positron, while the second is w
 - Examine indentation when creating a function
 - Examine indentation when creating a for loop
 - Examine indentation inside a tryCatch call
-
-## Installation instructions
-
-1. Download the latest version in the `releases/` folder.
-2. Use `cmd+shift+P` (MacOS) or `ctrl+shift+P` (Windows) to open the command palette, and select "Extensions: install from VSIX".
-3. Select the `.vsix` that was downloaded.
