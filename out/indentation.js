@@ -6,13 +6,25 @@ function getIndentationEdit(document, position, tabSize = 2) {
     if (lineIndex < 0) {
         return undefined;
     }
-    const prevLine = document.lineAt(lineIndex);
-    const prevLineText = prevLine.text;
+    // Look for the "effective" previous line (skipping comments/empty lines)
+    // for Pipe Indentation purposes.
+    let effectiveLineIndex = lineIndex;
+    let effectiveLineText = document.lineAt(effectiveLineIndex).text;
+    // Scan backwards for non-comment/non-empty line
+    for (let i = lineIndex; i >= 0; i--) {
+        const text = document.lineAt(i).text;
+        // Check if line is empty or a full-line comment
+        if (!/^\s*#/.test(text) && !/^\s*$/.test(text)) {
+            effectiveLineIndex = i;
+            effectiveLineText = text;
+            break;
+        }
+    }
     // Check for Pipe Indentation
     // Regex for pipe at end of line: |> or %>% or + or %T> or %<>%
     // We check for > (end of |>, %T>, %<>%), % (end of %>%), or +
-    if (/(?:%>|\|>|\+)\s*$/.test(prevLineText) || /%\s*$/.test(prevLineText)) {
-        return getPipeIndentation(document, lineIndex, tabSize);
+    if (/(?:%>|\|>|\+)\s*$/.test(effectiveLineText) || /%\s*$/.test(effectiveLineText)) {
+        return getPipeIndentation(document, effectiveLineIndex, tabSize);
     }
     // Check for Argument Alignment
     return getAlignmentColumn(document, position);

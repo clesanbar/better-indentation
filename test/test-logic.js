@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const indentation_1 = require("../src/indentation");
+const indentation_1 = require("../out/indentation");
 function test() {
     // Test 1
     const lines1 = [

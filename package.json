@@ -2,7 +2,7 @@
   "name": "indenter",
   "displayName": "IndenteR",
   "description": "Better indentation for R in Positron/VS Code",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "clemente",
   "engines": {
     "vscode": "^1.75.0"

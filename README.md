@@ -38,4 +38,4 @@ The first is what you get when you're writing in Positron, while the second is w
 ## Subsequent steps
 
 - [x] Pipe indentation erroneously inherits deep indentation from aligned arguments.
-- [] The indentation seems to reset when including a comment between a pipe and a function.
+- [x] The indentation seems to reset when including a comment between a pipe and a function.

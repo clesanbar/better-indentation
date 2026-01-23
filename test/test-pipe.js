@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const indentation_1 = require("../src/indentation");
+const indentation_1 = require("../out/indentation");
 function test() {
     // Case from user
     const lines1 = [
@@ -55,6 +55,18 @@ function test() {
     };
     const col4 = (0, indentation_1.getIndentationEdit)(doc4, { line: 1, character: 0 }, 2);
     console.log(`Test Args: ${col4 === 7 ? 'PASS' : 'FAIL (got ' + col4 + ')'}`);
+
+    // Case Comment Interruption
+    const lines5 = [
+        'data |>',
+        '  # comment',
+        ''
+    ];
+    const doc5 = {
+        lineAt: (l) => ({ text: lines5[l], range: { end: { character: lines5[l].length } } })
+    };
+    const col5 = (0, indentation_1.getIndentationEdit)(doc5, { line: 2, character: 0 }, 2);
+    console.log(`Test Comment Interruption: ${col5 === 2 ? 'PASS' : 'FAIL (got ' + col5 + ')'}`);
 }
 test();
 //# sourceMappingURL=test-pipe.js.map
