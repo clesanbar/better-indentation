@@ -130,15 +130,20 @@ function getPipeIndentation(document: FakeDocument, lineIndex: number, tabSize: 
     const anchorIndent = anchorIndentMatch ? anchorIndentMatch[0].length : 0;
     
     // 2. Check predecessor of anchor line.
-    const prevAnchorIndex = anchorLineIndex - 1;
+    let prevAnchorIndex = anchorLineIndex - 1;
     let addIndent = true;
     
-    if (prevAnchorIndex >= 0) {
-        const prevAnchorText = document.lineAt(prevAnchorIndex).text;
-         // Fix regex to match |> (ends in >), %>% (ends in %), + (ends in +)
-         if (/(?:%>|\|>|\+)\s*$/.test(prevAnchorText) || /%\s*$/.test(prevAnchorText)) {
-             addIndent = false;
-         }
+    // Scan backwards for non-comment/non-empty line
+    for (let i = prevAnchorIndex; i >= 0; i--) {
+        const text = document.lineAt(i).text;
+        if (!/^\s*#/.test(text) && !/^\s*$/.test(text)) {
+            prevAnchorIndex = i;
+            // check if this effective previous line ends in a pipe
+            if (/(?:%>|\|>|\+)\s*$/.test(text) || /%\s*$/.test(text)) {
+                addIndent = false;
+            }
+            break;
+        }
     }
     
     return addIndent ? anchorIndent + tabSize : anchorIndent;
