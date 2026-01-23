@@ -1,5 +1,7 @@
 # indentR: an extension for better indentation in Positron
 
+<img src="logo/final_logo.png" width="200" alt="indentR Logo">
+
 The main goal of this project is to build an extension for Positron that mimics the way that indentation works for RStudio. Consider the following example, adapted from [this post](https://stackoverflow.com/questions/79736776/how-to-have-function-argument-indenting):
 
 ```

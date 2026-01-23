@@ -2,7 +2,8 @@
   "name": "indentr",
   "displayName": "indentR",
   "description": "Better indentation for R in Positron/VS Code",
-  "version": "0.0.7",
+  "icon": "logo/final_logo.png",
+  "version": "0.0.8",
   "author": "Clemente T. Sánchez",
   "publisher": "clemente-t-sanchez",
   "repository": {
