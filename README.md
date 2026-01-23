@@ -40,7 +40,15 @@ The first is what you get when you're writing in Positron, while the second is w
 - [x] Pipe indentation erroneously inherits deep indentation from aligned arguments.
 - [x] The indentation seems to reset when including a comment between a pipe and a function.
 - [x] Avoid increasing indentation in the middle of a piped object.
-- [] Completely reset indentation after the chain of pipes is over and a new object is created.
+- [x] Completely reset indentation after the chain of pipes is over and a new object is created.
+- [] Automatically close parentheses and quotation marks, as the default Positron functionality does.
+
+## Things that I need to test
+
+- Use a case_when() inside a mutate call and see how that behaves
+- Examine indentation when creating a function
+- Examine indentation when creating a for loop
+- Examine indentation inside a tryCatch call
 
 ## Future fixes, not priority
 
