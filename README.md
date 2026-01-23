@@ -17,6 +17,8 @@ iris |>
 ```
 The first is what you get when you're writing in Positron, while the second is what you get when you are writing in RStudio. Even if some consider the second to be improper code, I think it looks nice. And while I understand that some prefer things like Air to format their code, I personally think it looks ugly, and that it is a waste of vertical space (sorry). I learned to code in R using RStudio, and want to keep using the same indentation rules now that I'm relying more on Positron. It seems the Posit team is not interested in implementing this feature, so I want to take it upon myself to do it with the help of Gemini CLI.
 
+This extension has been tested for version 2026.01.0 build 147 of Positron.
+
 ## Repository structure
 
 - `src/`: Core TypeScript implementation logic.
