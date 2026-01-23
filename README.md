@@ -2,13 +2,13 @@
 
 ## Overview
 
-The main goal of this repository is to build an extension for Positron that mimics the way that indentation works for RStudio. Consider the following example:
+The main goal of this project is to build an extension for Positron that mimics the way that indentation works for RStudio. Consider the following example, adapted from [this example](https://stackoverflow.com/questions/79736776/how-to-have-function-argument-indenting):
 
 ```
 iris |>
-  #Only function indented
+  # only function indented
   mutate(test= "dog",
-#function arguments not indented
+# function arguments not indented
 test_2 = "cat")
 
 iris |> 
@@ -17,9 +17,9 @@ iris |>
          # and function arguments are indented
          test_2 = "cat")
 ```
-The first is what you get when you're writing in Positron, while the second is what you get when you are writing in R. I personally like the second one more, even if some might disagree. And while I understand that some prefer things like Air to format their code, I personally think it looks ugly, and that it is a waste of space. I learned to code in R using RStudio, and want to keep using the same indentation rules. It seems the Positron team is not interested in implementing this feature, so I want to take it upon myself to do it.
+The first is what you get when you're writing in Positron, while the second is what you get when you are writing in RStudio. Even if some consider the second to be improper code, I think it looks nice. And while I understand that some prefer things like Air to format their code, I personally think it looks ugly, and that it is a waste of vertical space (sorry). I learned to code in R using RStudio, and want to keep using the same indentation rules. It seems the Positron team is not interested in implementing this feature, so I want to take it upon myself to do it using Gemini CLI.
 
-## Project Structure
+## Repository structure
 
 - `src/`: Core TypeScript implementation logic.
 - `test/`: Test cases and scripts to verify indentation behavior.
@@ -35,7 +35,7 @@ The first is what you get when you're writing in Positron, while the second is w
 - [x] **Implementation - Arguments:** Implement alignment logic for function arguments inside parentheses.
 - [x] **Testing:** Verify the behavior against the `iris` example provided in the overview.
 
-## Subsequent steps
+## Unexpected changes in functionality
 
 - [x] Pipe indentation erroneously inherits deep indentation from aligned arguments.
 - [x] The indentation seems to reset when including a comment between a pipe and a function.
@@ -43,13 +43,15 @@ The first is what you get when you're writing in Positron, while the second is w
 - [x] Completely reset indentation after the chain of pipes is over and a new object is created.
 - [] Automatically close parentheses and quotation marks, as the default Positron functionality does.
 
-## Things that I need to test
+## Things that I still need to test
 
 - Use a case_when() inside a mutate call and see how that behaves
 - Examine indentation when creating a function
 - Examine indentation when creating a for loop
 - Examine indentation inside a tryCatch call
 
-## Future fixes, not priority
+## Installation instructions
 
-- [x] Every time the extension compiles there is a "A 'repository' field is missing from the 'package.json' manifest file." warning that I have to manually accept. Add a the field that is necessary for this to stop being a problem.
+1. Download the latest version in the `releases/` folder.
+2. Use `cmd+shift+P` (MacOS) or `ctrl+shift+P` (Windows) to open the command palette, and select "Extensions: install from VSIX".
+3. Select the `.vsix` that was downloaded.
