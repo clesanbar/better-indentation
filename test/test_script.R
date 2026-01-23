@@ -13,13 +13,15 @@ data <- tibble(a,b) |>
   mutate(c = c + b,
          d = c * 10)
 
-         second_data <- data |>
-           # create new variables
-           mutate(f = c * d) |>
-             # subset to certain cases
-             filter(a == 4) |>
-               # and then keep a couple of variables
-               select(a, b, c)
+second_data <- data |>
+  # create new variables
+  mutate(f = c * d) |>
+    # subset tp certain cases
+    filter(a == 4)
+  
+  third_data <- second_data |>
+    # keep a couple of variables
+    select(a, b,c )
 
 
 # Intended functionality ----------
@@ -32,7 +34,9 @@ data <- tibble(a,b) |>
 second_data <- data |>
   # create new variables
   mutate(f = c * d) |>
-  # subset to certain cases
-  filter(a == 4) |>
-  # and then keep a couple of variables
+  # subset tp certain cases
+  filter(a == 4)
+    
+third_data <- second_data |>
+  # keep a couple of variables
   select(a, b, c)
