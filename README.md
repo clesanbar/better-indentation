@@ -19,13 +19,6 @@ iris |>
 ```
 The first is what you get when you're writing in Positron, while the second is what you get when you are writing in RStudio. Even if some consider the second to be improper code, I think it looks nice. And while I understand that some prefer things like Air to format their code, I personally think it looks ugly, and that it is a waste of vertical space (sorry). I learned to code in R using RStudio, and want to keep using the same indentation rules now that I'm relying more on Positron. It seems the Posit team is not interested in implementing this feature, so I want to take it upon myself to do it with the help of Gemini CLI.
 
-## Installation instructions
-
-1. Download the latest version in the `releases/` folder.
-2. Use `cmd+shift+P` (MacOS) or `ctrl+shift+P` (Windows) to open the command palette, and select "Extensions: install from VSIX".
-3. Select the `.vsix` that was downloaded.
-4. Let me know if you find any cases I haven't considered!
-
 ## Repository structure
 
 - `src/`: Core TypeScript implementation logic.
@@ -33,6 +26,13 @@ The first is what you get when you're writing in Positron, while the second is w
 - `config/`: Configuration files (TypeScript config, Language configuration).
 - `docs/`: Project research and design documentation.
 - `releases/`: Packaged `.vsix` files for installation.
+
+## Installation instructions
+
+1. Download the latest version in the `releases/` folder.
+2. Use `cmd+shift+P` (MacOS) or `ctrl+shift+P` (Windows) to open the command palette, and select "Extensions: install from VSIX".
+3. Select the `.vsix` that was downloaded.
+4. Let me know if you find any cases I haven't considered!
 
 ## Initial steps
 
