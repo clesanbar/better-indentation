@@ -56,11 +56,11 @@ This extension has been tested for version 2026.01.0 build 147 of Positron.
 - [x] Avoid increasing indentation in the middle of a piped object.
 - [x] Completely reset indentation after the chain of pipes is over and a new object is created.
 - [x] Allow for some degree of air-like formatting when the user hits enter inside an empty parenthesis after a function call.
+- [ ] Improve consistency of indenting when using function calls inside of function calls.
 - [ ] Automatically close parentheses and quotation marks, as the default Positron functionality does.
 
 ## Things that I still need to test
 
-- Use a case_when() inside a mutate call and see how that behaves
 - Examine indentation when creating a function
 - Examine indentation when creating a for loop
 - Examine indentation inside a tryCatch call
