@@ -281,9 +281,55 @@ export function getAlignmentColumn(
     if (firstNonWsMatch && firstNonWsMatch.index !== undefined) {
         return foundBracketPos.character + 1 + firstNonWsMatch.index;
     } else {
-        const bracketLineIndentMatch = bracketLineText.match(/^\s*/);
-        const bracketLineIndent = bracketLineIndentMatch ? bracketLineIndentMatch[0].length : 0;
-        return bracketLineIndent + tabSize;
+        // Calculate anchor column based on the start of the current expression
+        let starts = [0];
+        let inString = false;
+        let stringChar = '';
+
+        for (let i = 0; i < foundBracketPos.character; i++) {
+            const char = bracketLineText[i];
+            
+            if (inString) {
+                if (char === stringChar) {
+                    if (i === 0 || bracketLineText[i-1] !== '\\') {
+                        inString = false;
+                    }
+                }
+                continue;
+            }
+            
+            if (char === '"' || char === "'" || char === '`') {
+                inString = true;
+                stringChar = char;
+                continue;
+            }
+            
+            if (char === '(' || char === '[' || char === '{') {
+                starts.push(i + 1);
+            } else if (char === ')' || char === ']' || char === '}') {
+                if (starts.length > 1) {
+                    starts.pop();
+                }
+            } else if (char === ',') {
+                if (starts.length > 0) {
+                    starts[starts.length - 1] = i + 1;
+                }
+            }
+        }
+        
+        const anchorStart = starts[starts.length - 1];
+        // Find first non-whitespace from anchorStart
+        let actualAnchor = anchorStart;
+        while (actualAnchor < bracketLineText.length && /\s/.test(bracketLineText[actualAnchor])) {
+            actualAnchor++;
+        }
+        
+        // If we went past the end (shouldn't happen given logic), fallback
+        if (actualAnchor >= bracketLineText.length) {
+             actualAnchor = anchorStart;
+        }
+
+        return actualAnchor + tabSize;
     }
 }
 

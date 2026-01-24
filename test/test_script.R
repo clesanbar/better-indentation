@@ -27,18 +27,16 @@ third_data <- second_data |>
   select(a, b, c) |>
   # test using the case_when function with RStudio-like indenting
   mutate(h = case_when(a == 1 ~ 2,
-                       b == 2 ~ 3,
-                       c == 3 ~ 4,
-                       TRUE ~ 5),
+                       b == 2 ~ 3),
          # when the variable is created in the middle of the function, indentation works well
          i = case_when(
            a == 1 ~ 2,
            b == 2 ~ 3
          )) |>
-  # but now it changes when it is the start of the function, indentation is different
+  # and now let's test whether the nested function indenting works well at the start (almost)
   mutate(j = case_when(
-    a == 1 ~ 2,
-    b == 2 ~ 3
+           a == 1 ~ 2,
+           b == 2 ~ 3
   ))
 
 
@@ -63,15 +61,13 @@ third_data <- second_data |>
   select(a, b, c) |>
   # test using the case_when function with RStudio-like indenting
   mutate(h = case_when(a == 1 ~ 2,
-                       b == 2 ~ 3,
-                       c == 3 ~ 4,
-                       TRUE ~ 5),
+                       b == 2 ~ 3),
          # when the variable is created in the middle of the function, indentation works well
          i = case_when(
            a == 1 ~ 2,
            b == 2 ~ 3
          )) |>
-  # and now when the varaible is created at the start of the function, indentation should look like this too
+  # this is how the nested indentation should work, including the position of the parentheses
   mutate(j = case_when(
            a == 1 ~ 2,
            b == 2 ~ 3
