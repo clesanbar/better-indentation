@@ -58,6 +58,7 @@ This extension has been tested for version 2026.01.0 build 147 of Positron.
 - [x] Allow for some degree of air-like formatting when the user hits enter inside an empty parenthesis after a function call.
 - [x] Improve consistency of indenting when using function calls inside of function calls.
 - [ ] Fix bug with incorrect position of parentheses inside of nested indentation.
+- [ ] Fix the issue with using pipes inside of function calls.
 - [ ] Automatically close parentheses and quotation marks, as the default Positron functionality does.
 
 ## Things that I still need to test
