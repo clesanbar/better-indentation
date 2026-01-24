@@ -55,8 +55,8 @@ This extension has been tested for version 2026.01.0 build 147 of Positron.
 - [x] The indentation seems to reset when including a comment between a pipe and a function.
 - [x] Avoid increasing indentation in the middle of a piped object.
 - [x] Completely reset indentation after the chain of pipes is over and a new object is created.
+- [x] Allow for some degree of air-like formatting when the user hits enter inside an empty parenthesis after a function call.
 - [ ] Automatically close parentheses and quotation marks, as the default Positron functionality does.
-- [ ] Allow for some degree of air-like formatting when the user hits enter inside an empty parenthesis after a function call.
 
 ## Things that I still need to test
 

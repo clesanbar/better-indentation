@@ -27,7 +27,7 @@ function getIndentationEdit(document, position, tabSize = 2) {
         return getPipeIndentation(document, effectiveLineIndex, tabSize);
     }
     // Check for Argument Alignment
-    const alignment = getAlignmentColumn(document, position);
+    const alignment = getAlignmentColumn(document, position, tabSize);
     if (alignment !== undefined) {
         return alignment;
     }
@@ -183,7 +183,7 @@ function findPipeAnchor(document, lineIndex) {
     }
     return anchorLineIndex;
 }
-function getAlignmentColumn(document, position) {
+function getAlignmentColumn(document, position, tabSize = 2) {
     const lineIndex = position.line - 1;
     if (lineIndex < 0) {
         return undefined;
@@ -226,7 +226,9 @@ function getAlignmentColumn(document, position) {
         return foundBracketPos.character + 1 + firstNonWsMatch.index;
     }
     else {
-        return undefined;
+        const bracketLineIndentMatch = bracketLineText.match(/^\s*/);
+        const bracketLineIndent = bracketLineIndentMatch ? bracketLineIndentMatch[0].length : 0;
+        return bracketLineIndent + tabSize;
     }
 }
 exports.getAlignmentColumn = getAlignmentColumn;

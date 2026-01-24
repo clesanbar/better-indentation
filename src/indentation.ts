@@ -50,7 +50,7 @@ export function getIndentationEdit(
     }
 
     // Check for Argument Alignment
-    const alignment = getAlignmentColumn(document, position);
+    const alignment = getAlignmentColumn(document, position, tabSize);
     if (alignment !== undefined) {
         return alignment;
     }
@@ -230,7 +230,8 @@ function findPipeAnchor(document: FakeDocument, lineIndex: number): number {
 
 export function getAlignmentColumn(
     document: FakeDocument,
-    position: FakePosition
+    position: FakePosition,
+    tabSize: number = 2
 ): number | undefined {
     const lineIndex = position.line - 1;
     if (lineIndex < 0) {
@@ -280,7 +281,9 @@ export function getAlignmentColumn(
     if (firstNonWsMatch && firstNonWsMatch.index !== undefined) {
         return foundBracketPos.character + 1 + firstNonWsMatch.index;
     } else {
-        return undefined; 
+        const bracketLineIndentMatch = bracketLineText.match(/^\s*/);
+        const bracketLineIndent = bracketLineIndentMatch ? bracketLineIndentMatch[0].length : 0;
+        return bracketLineIndent + tabSize;
     }
 }
 

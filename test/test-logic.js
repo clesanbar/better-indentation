@@ -43,7 +43,7 @@ function test() {
         lineAt: (l) => ({ text: lines4[l], range: { end: { character: lines4[l].length } } })
     };
     const col4 = (0, indentation_1.getAlignmentColumn)(doc4, { line: 1, character: 0 });
-    console.log(`Test 4 (empty): ${col4 === undefined ? 'PASS' : 'FAIL (got ' + col4 + ')'}`);
+    console.log(`Test 4 (empty): ${col4 === 2 ? 'PASS' : 'FAIL (got ' + col4 + ')'}`);
 }
 test();
 //# sourceMappingURL=test-logic.js.map

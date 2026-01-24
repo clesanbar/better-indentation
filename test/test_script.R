@@ -11,14 +11,14 @@ b <- 1:10
 data <- tibble(a, b) |>
   # create new variables
   mutate(
-c = a + b,
-d = c * 10
+    c = a + b,
+    d = c * 10
   )
 
 second_data <- data |>
   # create new variables
   mutate(f = c * d,
-         g = f^2) |>
+         g = f ^ 2) |>
   # subset to certain cases
   filter(a == 4)
 
@@ -39,7 +39,7 @@ data <- tibble(a, b) |>
 second_data <- data |>
   # create new variables
   mutate(f = c * d,
-         g = f^2) |>
+         g = f ^ 2) |>
   # subset to certain cases
   filter(a == 4)
 
