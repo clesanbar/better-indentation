@@ -15,29 +15,20 @@ data <- tibble(a, b) |>
     d = c * 10
   )
 
-second_data <- data |>
+second_data <- tibble(a) |>
   # create new variables
-  mutate(f = c * d,
-         g = f ^ 2) |>
+  mutate(f = a^2,
+         g = f*3) |>
   # subset to certain cases
   filter(a == 4)
 
-third_data <- second_data |>
-  # keep a couple of variables
-  select(a, b, c) |>
-  # test using the case_when function with RStudio-like indenting
-  mutate(h = case_when(a == 1 ~ 2,
-                       b == 2 ~ 3),
-         # when the variable is created in the middle of the function, indentation works well
-         i = case_when(
-           a == 1 ~ 2,
-           b == 2 ~ 3
-         )) |>
-  # and now let's test whether the nested function indenting works well at the start (almost)
-  mutate(j = case_when(
-           a == 1 ~ 2,
-           b == 2 ~ 3
-  ))
+third_data <- data |>
+  # merge with other data set
+  left_join(second_data |>
+  # change the variable mid pipe
+  mutate(a = a + 2)) |>
+  # remove missing values
+  drop_na(f)
 
 
 # Intended functionality ----------
@@ -49,26 +40,17 @@ data <- tibble(a, b) |>
     d = c * 10
   )
 
-second_data <- data |>
+second_data <- tibble(a) |>
   # create new variables
-  mutate(f = c * d,
-         g = f ^ 2) |>
+  mutate(f = a^2,
+         g = f*3) |>
   # subset to certain cases
   filter(a == 4)
 
-third_data <- second_data |>
-  # keep a couple of variables
-  select(a, b, c) |>
-  # test using the case_when function with RStudio-like indenting
-  mutate(h = case_when(a == 1 ~ 2,
-                       b == 2 ~ 3),
-         # when the variable is created in the middle of the function, indentation works well
-         i = case_when(
-           a == 1 ~ 2,
-           b == 2 ~ 3
-         )) |>
-  # this is how the nested indentation should work, including the position of the parentheses
-  mutate(j = case_when(
-           a == 1 ~ 2,
-           b == 2 ~ 3
-         ))
+third_data <- data |>
+  # merge with other data set
+  left_join(second_data |>
+              # change the variable mid pipe
+              mutate(a = a + 2)) |>
+  # remove missing values
+  drop_na(f)

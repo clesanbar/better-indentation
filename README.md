@@ -57,13 +57,10 @@ This extension has been tested for version 2026.01.0 build 147 of Positron.
 - [x] Completely reset indentation after the chain of pipes is over and a new object is created.
 - [x] Allow for some degree of air-like formatting when the user hits enter inside an empty parenthesis after a function call.
 - [x] Improve consistency of indenting when using function calls inside of function calls.
-- [ ] Fix bug with incorrect position of parentheses inside of nested indentation.
 - [ ] Fix the issue with using pipes inside of function calls.
-- [ ] Automatically close parentheses and quotation marks, as the default Positron functionality does.
+- [ ] Automatically close (, ", and { as the default Positron functionality does.
 - [ ] Allow for the indentation rules to work for .md and .qmd files, but only inside code chunks.
 
 ## Things that I still need to test
 
-- Examine indentation when creating a function
-- Examine indentation when creating a for loop
 - Examine indentation inside a tryCatch call
