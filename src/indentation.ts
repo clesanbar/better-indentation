@@ -16,18 +16,47 @@ export interface FakePosition {
     character: number;
 }
 
+function findMatchingOpeningParen(document: FakeDocument, lineIndex: number): number | undefined {
+    let bracketLevel = 0;
+    let currentScanLineIndex = lineIndex;
+    let currentScanText = document.lineAt(currentScanLineIndex).text;
+
+    while (currentScanLineIndex >= 0) {
+        for (let c = currentScanText.length - 1; c >= 0; c--) {
+            if (isInStringOrComment(currentScanText, c)) continue;
+
+            const char = currentScanText[c];
+            if (char === ')') {
+                bracketLevel++;
+            } else if (char === '(') {
+                if (bracketLevel > 0) {
+                    bracketLevel--;
+                } else {
+                    return currentScanLineIndex; // Found the matching opening parenthesis
+                }
+            }
+        }
+        currentScanLineIndex--;
+        if (currentScanLineIndex >= 0) {
+            currentScanText = document.lineAt(currentScanLineIndex).text;
+        }
+    }
+    return undefined; // No matching opening parenthesis found
+}
+
 export function getIndentationEdit(
     document: FakeDocument,
     position: FakePosition,
     tabSize: number = 2
 ): number | undefined {
-    const lineIndex = position.line - 1;
+    const lineIndex = position.line - 1; // This is the line *before* the current cursor position
     if (lineIndex < 0) {
         return undefined;
     }
 
+    // This is the actual line content we care about for determining indentation of the *next* line.
     // Look for the "effective" previous line (skipping comments/empty lines)
-    // for Pipe Indentation purposes.
+    // This is crucial for correctly identifying the context for indentation.
     let effectiveLineIndex = lineIndex;
     let effectiveLineText = document.lineAt(effectiveLineIndex).text;
     
@@ -39,6 +68,22 @@ export function getIndentationEdit(
             effectiveLineIndex = i;
             effectiveLineText = text;
             break;
+        }
+    }
+
+    // Now apply the function-call-reset logic using the effective line.
+    const trimmedEffectiveLineText = effectiveLineText.trim();
+    if (trimmedEffectiveLineText.endsWith(')')) {
+        const openParenLineIndex = findMatchingOpeningParen(document, effectiveLineIndex);
+        if (openParenLineIndex !== undefined) {
+            const openParenLineText = document.lineAt(openParenLineIndex).text;
+            // Check if the opening parenthesis line is *not* ending with a pipe,
+            // indicating it's a regular function call and not part of a pipe chain
+            if (!(/(?:%>|\|>|\+)\s*$/.test(openParenLineText) || /%\s*$/.test(openParenLineText))) {
+                // Return the indentation of the line containing the opening parenthesis
+                const openParenIndentMatch = openParenLineText.match(/^\s*/);
+                return openParenIndentMatch ? openParenIndentMatch[0].length : 0;
+            }
         }
     }
 
