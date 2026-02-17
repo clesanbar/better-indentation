@@ -60,6 +60,7 @@ This extension has been tested for version 2026.01.0 build 147 of Positron.
 - [ ] Fix bug with incorrect position of parentheses inside of nested indentation.
 - [ ] Fix the issue with using pipes inside of function calls.
 - [ ] Automatically close parentheses and quotation marks, as the default Positron functionality does.
+- [ ] Allow for the indentation rules to work for .md and .qmd files, but only inside code chunks.
 
 ## Things that I still need to test
 
