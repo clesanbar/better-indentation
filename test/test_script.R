@@ -25,8 +25,8 @@ second_data <- tibble(a) |>
 third_data <- data |>
   # merge with other data set
   left_join(second_data |>
-  # change the variable mid pipe
-  mutate(a = a + 2)) |>
+              # change the variable mid pipe
+              mutate(a = a + 2)) |>
   # remove missing values
   drop_na(f)
 

@@ -128,10 +128,10 @@ export function getIndentationEdit(
             // We want to reset to the anchor of the chain.
             
             // Walk up the chain to find the root
-            let chainAnchorIndex = findPipeAnchor(document, preStartLineIndex);
+            let chainAnchor = findPipeAnchor(document, preStartLineIndex);
             
             for (let i = 0; i < 1000; i++) { // Safety limit
-                let prevChainIndex = chainAnchorIndex - 1;
+                let prevChainIndex = chainAnchor.line - 1;
                 let prevChainText = "";
                 let foundPrev = false;
 
@@ -151,13 +151,13 @@ export function getIndentationEdit(
                 }
 
                 if (/(?:%>|\|>|\+)\s*$/.test(prevChainText) || /%\s*$/.test(prevChainText)) {
-                    chainAnchorIndex = findPipeAnchor(document, prevChainIndex);
+                    chainAnchor = findPipeAnchor(document, prevChainIndex);
                 } else {
                     break;
                 }
             }
             
-            const anchorLine = document.lineAt(chainAnchorIndex);
+            const anchorLine = document.lineAt(chainAnchor.line);
             const anchorIndentMatch = anchorLine.text.match(/^\s*/);
             return anchorIndentMatch ? anchorIndentMatch[0].length : 0;
         }
@@ -198,7 +198,16 @@ function findExpressionStart(document: FakeDocument, lineIndex: number): number 
 }
 
 function getPipeIndentation(document: FakeDocument, lineIndex: number, tabSize: number): number {
-    const anchorLineIndex = findPipeAnchor(document, lineIndex);
+    const anchor = findPipeAnchor(document, lineIndex);
+    
+    if (anchor.isInsideBracket) {
+        const alignment = getAlignmentColumn(document, { line: lineIndex + 1, character: 0 }, tabSize);
+        if (alignment !== undefined) {
+            return alignment + tabSize;
+        }
+    }
+
+    const anchorLineIndex = anchor.line;
     const anchorLine = document.lineAt(anchorLineIndex);
     const anchorIndentMatch = anchorLine.text.match(/^\s*/);
     const anchorIndent = anchorIndentMatch ? anchorIndentMatch[0].length : 0;
@@ -223,18 +232,24 @@ function getPipeIndentation(document: FakeDocument, lineIndex: number, tabSize: 
     return addIndent ? anchorIndent + tabSize : anchorIndent;
 }
 
-function findPipeAnchor(document: FakeDocument, lineIndex: number): number {
+interface PipeAnchor {
+    line: number;
+    isInsideBracket: boolean;
+}
+
+function findPipeAnchor(document: FakeDocument, lineIndex: number): PipeAnchor {
     const prevLineText = document.lineAt(lineIndex).text;
     
     const pipeMatch = prevLineText.match(/((?:%>%)|(?:\|>)|(?:%T>)|(?:%<>%)|(?:\+))\s*$/);
     if (!pipeMatch) {
-         return lineIndex; 
+         return { line: lineIndex, isInsideBracket: false }; 
     }
     
     const textBeforePipe = prevLineText.substring(0, pipeMatch.index);
     
     let bracketLevel = 0;
     let anchorLineIndex = lineIndex;
+    let isInsideBracket = false;
     
     let currentScanLineIndex = lineIndex;
     let currentScanText = textBeforePipe;
@@ -254,6 +269,7 @@ function findPipeAnchor(document: FakeDocument, lineIndex: number): number {
                     }
                 } else {
                     anchorLineIndex = currentScanLineIndex;
+                    isInsideBracket = true;
                 }
             }
         }
@@ -264,13 +280,18 @@ function findPipeAnchor(document: FakeDocument, lineIndex: number): number {
         if (bracketLevel === 0 && currentScanLineIndex === lineIndex) {
             break;
         }
+        
+        // If we hit an open bracket at level 0, we stop
+        if (isInsideBracket) {
+            break;
+        }
 
         currentScanLineIndex--;
         if (currentScanLineIndex >= 0) {
             currentScanText = document.lineAt(currentScanLineIndex).text;
         }
     }
-    return anchorLineIndex;
+    return { line: anchorLineIndex, isInsideBracket };
 }
 
 export function getAlignmentColumn(

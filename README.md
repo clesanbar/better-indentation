@@ -58,7 +58,7 @@ This extension has been tested for version 2026.01.0 build 147 of Positron.
 - [x] Allow for some degree of air-like formatting when the user hits enter inside an empty parenthesis after a function call.
 - [x] Improve consistency of indenting when using function calls inside of function calls.
 - [x] Fix the weird bug where after using theme_update() the indentation increases by one for all subsequent lines.
-- [ ] Fix the issue with using pipes inside of function calls.
+- [x] Fix the issue with using pipes inside of function calls.
 - [ ] Automatically close (, ", and { as the default Positron functionality does.
 - [ ] Allow for the indentation rules to work for .md and .qmd files, but only inside code chunks.
 
